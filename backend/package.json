@@ -1,0 +1,14 @@
+{
+  "name": "eski-enawga",
+  "version": "1.0.0",
+  "description": "✨ Fullstack Chat & Video Calling App ✨",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mfeti",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
