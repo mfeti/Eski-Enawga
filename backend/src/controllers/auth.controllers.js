@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import userModel from "../models/auth.models.js";
 import { isValidEmail, isValidPassword } from "../utils/validators.js";
+import { upsertStreamUser } from "../config/stream.js";
 
 export const createUser = async (req, res, next) => {
   const { fullName, email, password } = req.body;
@@ -51,6 +52,12 @@ export const createUser = async (req, res, next) => {
     );
 
     // TODO: user register in stream
+    await upsertStreamUser({
+      id: newUser._id,
+      name: newUser.fullName,
+      image: newUser.profilePicture,
+    });
+
     res.cookie("jwt", token, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true, // prevent XSS attacks,
