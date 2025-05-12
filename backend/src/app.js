@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.routes.js";
 import errorHandler from "./middlewares/errorHandle.middlewares.js";
 import userRouter from "./routes/user.routes.js";
+import chatRouter from "./routes/chat.routes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(
 // routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/chats", chatRouter);
 
 app.use(errorHandler);
 
