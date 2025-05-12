@@ -72,6 +72,11 @@ export const createUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
+    if (req.cookies.jwt) {
+      const error = new Error("User already logged in");
+      error.statusCode = 400;
+      throw error;
+    }
     const { email, password } = req.body;
     if (!email || !password) {
       const error = new Error("All fields are required");
@@ -114,4 +119,12 @@ export const loginUser = async (req, res, next) => {
 export const logoutUser = async (req, res) => {
   res.clearCookie("jwt");
   res.status(200).json({ success: true, message: "Successfully logout!" });
+};
+
+export const onboard = async (req, res, next) => {
+  try {
+    res.send(req.user);
+  } catch (error) {
+    next(error);
+  }
 };
