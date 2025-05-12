@@ -47,7 +47,7 @@ const userSchema = new Schema(
       city: { type: String, trim: true, default: "" },
       street: { type: String, trim: true, default: "" },
     },
-    onBoarding: {
+    isOnboarding: {
       type: Boolean,
       default: false,
     },

@@ -55,7 +55,7 @@ export const createUser = async (req, res, next) => {
     await upsertStreamUser({
       id: newUser._id,
       name: newUser.fullName,
-      image: newUser.profilePicture,
+      image: newUser.profilePicture || "",
     });
 
     res.cookie("jwt", token, {
@@ -72,11 +72,11 @@ export const createUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
-    if (req.cookies.jwt) {
-      const error = new Error("User already logged in");
-      error.statusCode = 400;
-      throw error;
-    }
+    // if (req.cookies.jwt) {
+    //   const error = new Error("User already logged in");
+    //   error.statusCode = 400;
+    //   throw error;
+    // }
     const { email, password } = req.body;
     if (!email || !password) {
       const error = new Error("All fields are required");
@@ -123,7 +123,47 @@ export const logoutUser = async (req, res) => {
 
 export const onboard = async (req, res, next) => {
   try {
-    res.send(req.user);
+    const userId = req.user._id;
+    const { fullName, bio, nativeLanguage, learningLanguage, location } =
+      req.body;
+    if (
+      !fullName ||
+      !bio ||
+      !nativeLanguage ||
+      !learningLanguage ||
+      !location
+    ) {
+      const error = new Error("All fields required");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const avatar = `https://avatar.iran.liara.run/username?username=${fullName}`;
+
+    const updateUser = await userModel.findOneAndUpdate(
+      userId,
+      {
+        ...req.body,
+        profilePicture: avatar || "",
+        isOnboarding: true,
+      },
+      { new: true }
+    );
+
+    if (!updateUser) {
+      const error = new Error("User not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    //TODO: update user in stream
+    await upsertStreamUser({
+      id: updateUser._id,
+      name: updateUser.fullName,
+      image: updateUser.profilePicture || "",
+    });
+
+    res.status(200).json({ success: true, user: updateUser });
   } catch (error) {
     next(error);
   }

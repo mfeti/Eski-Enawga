@@ -14,5 +14,8 @@ authRouter.post("/sign-in", loginUser);
 
 authRouter.post("/sign-out", isAuthenticated, logoutUser);
 authRouter.post("/onboarding", isAuthenticated, onboard);
+authRouter.get("/me", isAuthenticated, (req, res) => {
+  res.status(200).json({ success: true, user: req.user });
+});
 
 export default authRouter;
