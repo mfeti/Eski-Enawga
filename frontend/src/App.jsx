@@ -1,12 +1,29 @@
-import React from "react";
+import { Route, Routes } from "react-router";
+import toast, { Toaster } from "react-hot-toast";
+import {
+  CallPage,
+  ChatPage,
+  HomePage,
+  LoginPage,
+  NotificationPage,
+  OnboardingPage,
+  SignupPage,
+} from "./pages";
 
 const App = () => {
   return (
     <div>
-      <h1 className="text-3xl font-bold underline text-">Hello world!</h1>
-      <button class="btn w-24 rounded-full btn-primary">One</button>
-      <button class="btn btn-secondary">Two</button>
-      <button class="btn btn-accent btn-outline">Three</button>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sign-up" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/call" element={<CallPage />} />
+        <Route path="/notification" element={<NotificationPage />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="*" element={<h1>404 Not Found</h1>} />
+      </Routes>
+      <Toaster />
     </div>
   );
 };
